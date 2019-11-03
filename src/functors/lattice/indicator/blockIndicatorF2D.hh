@@ -124,7 +124,7 @@ bool BlockIndicatorMaterial2D<T>::operator() (bool output[], const int input[])
   // of BlockGeometry2D<T>::get to avoid resetting geometry
   // statistics:
   const BlockGeometryStructure2D<T>& blockGeometry = this->_blockGeometryStructure;
-  const int current = blockGeometry.get(input[0], input[1]);
+  const int current = blockGeometry.getMaterial(input[0], input[1]);
   output[0] = std::any_of(_materials.cbegin(),
                           _materials.cend(),
                           [current](int material) { return current == material; });

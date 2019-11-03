@@ -250,13 +250,6 @@ public:
   template <typename FIELD>
   void defineField(SuperGeometry2D<T>& sGeometry, IndicatorF2D<T>& indicator,
                    AnalyticalF2D<T,T>& field);
-#ifndef OLB_PRECOMPILED
-  void setExternalParticleField(SuperGeometry2D<T>& sGeometry, AnalyticalF2D<T,T>& velocity,
-                                SmoothIndicatorF2D<T,T,true>& sIndicator);
-#else
-  void setExternalParticleField(SuperGeometry2D<T>& sGeometry, AnalyticalF2D<T,T>& velocity,
-                                SmoothIndicatorF2D<T,T,true>& sIndicator) {};
-#endif
 
   template <typename FIELD>
   void addField(SuperGeometry2D<T>& sGeometry, IndicatorF2D<T>& indicator,
@@ -351,6 +344,14 @@ private:
   /// Resets and reduce the statistics
   void reset_statistics();
 };
+
+////////// FREE FUNCTIONS //////////
+
+template<typename T, typename DESCRIPTOR>
+void setSuperExternalParticleField( SuperGeometry2D<T>& sGeometry, AnalyticalF2D<T,T>& velocity,
+                                    SmoothIndicatorF2D<T,T,true>&,
+                                    SuperLattice2D<T, DESCRIPTOR>& sLattice );
+
 
 } // namespace olb
 

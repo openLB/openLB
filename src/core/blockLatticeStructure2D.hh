@@ -31,7 +31,6 @@
 #include "functors/lattice/indicator/blockIndicatorBaseF2D.hh"
 #include "functors/lattice/indicator/blockIndicatorF2D.hh"
 
-
 namespace olb {
 
 
@@ -227,51 +226,6 @@ void BlockLatticeStructure2D<T,DESCRIPTOR>::addField(
   delete[] fieldTmp;
 }
 
-#ifndef OLB_PRECOMPILED
-template<typename T, typename DESCRIPTOR>
-void BlockLatticeStructure2D<T,DESCRIPTOR>::setExternalParticleField(BlockGeometryStructure2D<T>& blockGeometry, AnalyticalF2D<T,T>& velocity, SmoothIndicatorF2D<T,T,true>& sIndicator)
-{
-
-  int start[2] = {0};
-  int end[2] = {0};
-  // check for intersection of cuboid and indicator
-  Cuboid2D<T> tmpCuboid(blockGeometry.getOrigin()[0], blockGeometry.getOrigin()[1], blockGeometry.getDeltaR(), blockGeometry.getNx(), blockGeometry.getNy());
-  T posXmin = sIndicator.getPos()[0] - sIndicator.getCircumRadius();
-  T posXmax = sIndicator.getPos()[0] + sIndicator.getCircumRadius();
-  T posYmin = sIndicator.getPos()[1] - sIndicator.getCircumRadius();
-  T posYmax = sIndicator.getPos()[1] + sIndicator.getCircumRadius();
-  if(tmpCuboid.checkInters(posXmin, posXmax, posYmin, posYmax, start[0], end[0], start[1], end[1])) {
-
-    for (int k=0; k<2; k++) {
-      start[k] -= 1;
-      if(start[k] < 0) start[k] = 0;
-      end[k] += 2;
-      if(end[k] > blockGeometry.getExtend()[k]) end[k] = blockGeometry.getExtend()[k];
-    }
-
-    T foo[3] = { }; /// Contains foo[0]=vel0; foo[1]=vel1; foo[2]=porosity
-    T physR[2]= { };
-    T porosity[1] = { };
-    for (int iX = start[0]; iX < end[0]; ++iX) {
-      for (int iY = start[1]; iY < end[1]; ++iY) {
-        blockGeometry.getPhysR(physR, iX, iY);
-        sIndicator(porosity, physR);
-        if (!util::nearZero(porosity[0])) {
-          // TODO: Check / adapt to use descriptor fields
-          velocity(foo,physR);
-          foo[0] *= porosity[0];
-          foo[1] *= porosity[0];
-          foo[2] = porosity[0];
-          get(iX, iY).template addField<descriptors::VELOCITY_NUMERATOR>(foo);
-          get(iX, iY).template addField<descriptors::VELOCITY_DENOMINATOR>(&foo[2]);
-          porosity[0] = 1.-porosity[0];
-          *(get(iX, iY).template getFieldPointer<descriptors::POROSITY>()) *= porosity[0];
-        }
-      }
-    }
-  }
-}
-#endif
 
 template<typename T, typename DESCRIPTOR>
 template<typename FIELD>
@@ -322,6 +276,52 @@ void BlockLatticeStructure2D<T,DESCRIPTOR>::iniEquilibrium(
 {
   BlockIndicatorMaterial2D<T> indicator(blockGeometry, material);
   iniEquilibrium(indicator, rho, u);
+}
+
+////////// FREE FUNCTIONS //////////
+
+template<typename T, typename DESCRIPTOR>
+void setBlockExternalParticleField(BlockGeometryStructure2D<T>& blockGeometry, AnalyticalF2D<T,T>& velocity, SmoothIndicatorF2D<T,T,true>& sIndicator, BlockLattice2D<T,DESCRIPTOR>& extendedBlockLattice)
+{
+
+  int start[2] = {0};
+  int end[2] = {0};
+  // check for intersection of cuboid and indicator
+  Cuboid2D<T> tmpCuboid(blockGeometry.getOrigin()[0], blockGeometry.getOrigin()[1], blockGeometry.getDeltaR(), blockGeometry.getNx(), blockGeometry.getNy());
+  T posXmin = sIndicator.getPos()[0] - sIndicator.getCircumRadius();
+  T posXmax = sIndicator.getPos()[0] + sIndicator.getCircumRadius();
+  T posYmin = sIndicator.getPos()[1] - sIndicator.getCircumRadius();
+  T posYmax = sIndicator.getPos()[1] + sIndicator.getCircumRadius();
+  if(tmpCuboid.checkInters(posXmin, posXmax, posYmin, posYmax, start[0], end[0], start[1], end[1])) {
+
+    for (int k=0; k<2; k++) {
+      start[k] -= 1;
+      if(start[k] < 0) start[k] = 0;
+      end[k] += 2;
+      if(end[k] > blockGeometry.getExtend()[k]) end[k] = blockGeometry.getExtend()[k];
+    }
+
+    T foo[3] = { }; /// Contains foo[0]=vel0; foo[1]=vel1; foo[2]=porosity
+    T physR[2]= { };
+    T porosity[1] = { };
+    for (int iX = start[0]; iX < end[0]; ++iX) {
+      for (int iY = start[1]; iY < end[1]; ++iY) {
+        blockGeometry.getPhysR(physR, iX, iY);
+        sIndicator(porosity, physR);
+        if (!util::nearZero(porosity[0])) {
+          // TODO: Check / adapt to use descriptor fields
+          velocity(foo,physR);
+          foo[0] *= porosity[0];
+          foo[1] *= porosity[0];
+          foo[2] = porosity[0];
+          extendedBlockLattice.get(iX, iY).template addField<descriptors::VELOCITY_NUMERATOR>(foo);
+          extendedBlockLattice.get(iX, iY).template addField<descriptors::VELOCITY_DENOMINATOR>(&foo[2]);
+          porosity[0] = 1.-porosity[0];
+          *(extendedBlockLattice.get(iX, iY).template getFieldPointer<descriptors::POROSITY>()) *= porosity[0];
+        }
+      }
+    }
+  }
 }
 
 

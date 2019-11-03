@@ -270,13 +270,6 @@ public:
   /// Initialize by equilibrium on a domain with a particular material number
   void iniEquilibrium(SuperGeometry3D<T>& sGeometry, int material,
                       AnalyticalF3D<T,T>& rho, AnalyticalF3D<T,T>& u);
-#ifndef OLB_PRECOMPILED
-  void setExternalParticleField(SuperGeometry3D<T>& sGeometry, AnalyticalF3D<T,T>& velocity,
-                                SmoothIndicatorF3D<T,T,true>& sIndicator);
-#else
-  void setExternalParticleField(SuperGeometry3D<T>& sGeometry, AnalyticalF3D<T,T>& velocity,
-                                SmoothIndicatorF3D<T,T,true>& sIndicator) {};
-#endif
 
   /// Apply collision step to a rectangular domain
   void collide(T x0, T x1, T y0, T y1, T z0, T z1);
@@ -351,6 +344,13 @@ private:
   /// Resets and reduce the statistics
   void reset_statistics();
 };
+
+
+template<typename T, typename DESCRIPTOR>
+void setSuperExternalParticleField( SuperGeometry3D<T>& sGeometry, AnalyticalF3D<T,T>& velocity,
+                                    SmoothIndicatorF3D<T,T,true>&,
+                                    SuperLattice3D<T, DESCRIPTOR>& sLattice );
+
 
 } // namespace olb
 

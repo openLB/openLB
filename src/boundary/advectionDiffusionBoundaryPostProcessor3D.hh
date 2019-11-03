@@ -180,8 +180,8 @@ processSubDomain(BlockLattice3D<T,DESCRIPTOR>& blockLattice, int x0_, int x1_,
       for (int iY=newY0; iY<=newY1; ++iY) {
         for (int iZ=newZ0; iZ<=newZ1; ++iZ) {
           // TODO: Update to use descriptor fields
-          T* velNeighbour = &blockLattice.get(iX+discreteNormalX,iY+discreteNormalY,iZ+discreteNormalZ)[DESCRIPTOR::q+offset+off];
-          T* velCell = &blockLattice.get(iX,iY,iZ)[DESCRIPTOR::q+offset+off2];
+          T* velNeighbour = &blockLattice.get(iX+discreteNormalX,iY+discreteNormalY,iZ+discreteNormalZ)[offset+off];
+          T* velCell = &blockLattice.get(iX,iY,iZ)[offset+off2];
           for (unsigned iD = 0; iD < DESCRIPTOR::d; ++iD) {
             velCell[iD] = velNeighbour[iD];
           }

@@ -177,7 +177,7 @@ void ParticleDynamics2D<T, DESCRIPTOR>::addParticleField(SmoothIndicatorF2D<T,T,
 {
   /// Analytical2D functor for particle motion (trans+rot)
   ParticleU2D<T,T,DESCRIPTOR> velocity(indicator, _converter);
-  _sLattice.setExternalParticleField(_superGeometry, velocity, indicator);
+  setSuperExternalParticleField(_superGeometry, velocity, indicator, _sLattice);
 }
 
 template<typename T, typename DESCRIPTOR>

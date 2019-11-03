@@ -146,12 +146,6 @@ public:
   virtual void iniEquilibrium(BlockGeometryStructure3D<T>& blockGeometry, int material,
                               AnalyticalF3D<T,T>& rho, AnalyticalF3D<T,T>& u);
 
-#ifndef OLB_PRECOMPILED
-  virtual void setExternalParticleField(BlockGeometryStructure3D<T>& blockGeometry,
-                                        AnalyticalF3D<T,T>& velocity,
-                                        SmoothIndicatorF3D<T,T,true>& sIndicator);
-#endif
-
   // pure virtual member functions
   virtual Cell<T,DESCRIPTOR>& get(int iX, int iY, int iZ) =0;
   virtual Cell<T,DESCRIPTOR>& get(const int latticeR[]) =0;
@@ -208,6 +202,14 @@ public:
   virtual LatticeStatistics<T>& getStatistics() =0;
   virtual LatticeStatistics<T> const& getStatistics() const =0;
 };
+
+
+////////// FREE FUNCTIONS //////////
+
+template <typename T, typename DESCRIPTOR>
+void setBlockExternalParticleField( BlockGeometryStructure3D<T>& blockGeometry, AnalyticalF3D<T,T>& velocity,
+                                    SmoothIndicatorF3D<T,T,true>& sIndicator,
+                                    BlockLattice3D<T,DESCRIPTOR>& extendedBlockLattice );
 
 }  // namespace olb
 

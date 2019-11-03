@@ -415,17 +415,6 @@ void SuperLattice2D<T,DESCRIPTOR>::defineField(SuperGeometry2D<T>& sGeometry, In
   defineField<FIELD>(indicatorF, field);
 }
 
-#ifndef OLB_PRECOMPILED
-template<typename T, typename DESCRIPTOR>
-void SuperLattice2D<T,DESCRIPTOR>::setExternalParticleField(SuperGeometry2D<T>& sGeometry,
-    AnalyticalF2D<T,T>& velocity, SmoothIndicatorF2D<T,T,true>& sIndicator)
-{
-  for (int iC = 0; iC < this->_loadBalancer.size(); ++iC) {
-    _extendedBlockLattices[iC].setExternalParticleField(sGeometry.getExtendedBlockGeometry(iC), velocity, sIndicator);
-  }
-}
-#endif
-
 template<typename T, typename DESCRIPTOR>
 template <typename FIELD>
 void SuperLattice2D<T,DESCRIPTOR>::addField(SuperGeometry2D<T>& sGeometry,
@@ -898,6 +887,23 @@ void SuperLattice2D<T,DESCRIPTOR>::communicate(bool verbose)
   _commStream.receive();
   _commStream.write();
 }*/
+
+
+
+////////// FREE FUNCTIONS //////////
+
+
+template<typename T, typename DESCRIPTOR>
+void setSuperExternalParticleField( SuperGeometry2D<T>& sGeometry, AnalyticalF2D<T,T>& velocity,
+                                    SmoothIndicatorF2D<T,T,true>& sIndicator,
+                                    SuperLattice2D<T, DESCRIPTOR>& sLattice )
+{
+  for (int iC = 0; iC < sLattice.getLoadBalancer().size(); ++iC) {
+    setBlockExternalParticleField( sGeometry.getExtendedBlockGeometry(iC), velocity, sIndicator,
+    sLattice.getExtendedBlockLattice(iC));
+  }
+}
+
 
 } // namespace olb
 

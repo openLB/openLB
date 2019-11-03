@@ -246,13 +246,12 @@ void BlockLatticeStructure3D<T,DESCRIPTOR>::iniEquilibrium(
   iniEquilibrium(indicator, rho, u);
 }
 
-#ifndef OLB_PRECOMPILED
+////////// FREE FUNCTIONS //////////
+
 template<typename T, typename DESCRIPTOR>
-void BlockLatticeStructure3D<T, DESCRIPTOR>::setExternalParticleField(
-  BlockGeometryStructure3D<T>& blockGeometry,
-  AnalyticalF3D<T, T>& velocity, SmoothIndicatorF3D<T,T,true>& sIndicator)
+void setBlockExternalParticleField(BlockGeometryStructure3D<T>& blockGeometry, AnalyticalF3D<T,T>& velocity, SmoothIndicatorF3D<T,T,true>& sIndicator, BlockLattice3D<T,DESCRIPTOR>& extendedBlockLattice)
 {
-  
+
   int start[3] = {0};
   int end[3] = {0};
   // check for intersection of cuboid and indicator
@@ -288,17 +287,17 @@ void BlockLatticeStructure3D<T, DESCRIPTOR>::setExternalParticleField(
             foo[1] *= porosity[0];
             foo[2] *= porosity[0];
             foo[3] = porosity[0];
-            get(iX, iY, iZ).template addField<descriptors::VELOCITY_NUMERATOR>(foo);
-            get(iX, iY, iZ).template addField<descriptors::VELOCITY_DENOMINATOR>(&foo[3]);
+            extendedBlockLattice.get(iX, iY, iZ).template addField<descriptors::VELOCITY_NUMERATOR>(foo);
+            extendedBlockLattice.get(iX, iY, iZ).template addField<descriptors::VELOCITY_DENOMINATOR>(&foo[3]);
             porosity[0] = 1. - porosity[0];
-            *(get(iX, iY, iZ).template getFieldPointer<descriptors::POROSITY>()) *= porosity[0];
+            *(extendedBlockLattice.get(iX, iY, iZ).template getFieldPointer<descriptors::POROSITY>()) *= porosity[0];
           }
         }
       }
     }
   }
 }
-#endif
+
 
 }  // namespace olb
 

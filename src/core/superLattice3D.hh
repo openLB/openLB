@@ -374,18 +374,6 @@ void SuperLattice3D<T,DESCRIPTOR>::iniEquilibrium(
   iniEquilibrium(sGeometry.getMaterialIndicator(material), rho, u);
 }
 
-#ifndef OLB_PRECOMPILED
-template<typename T, typename DESCRIPTOR>
-void SuperLattice3D<T,DESCRIPTOR>::setExternalParticleField(SuperGeometry3D<T>& sGeometry,
-    AnalyticalF3D<T,T>& velocity, SmoothIndicatorF3D<T,T,true>& sIndicator)
-{
-  for (int iC = 0; iC < this->_loadBalancer.size(); ++iC) {
-    _extendedBlockLattices[iC].setExternalParticleField(
-      sGeometry.getExtendedBlockGeometry(iC), velocity, sIndicator);
-  }
-}
-#endif
-
 template<typename T, typename DESCRIPTOR>
 void SuperLattice3D<T, DESCRIPTOR>::collide()
 {
@@ -814,6 +802,22 @@ bool* SuperLattice3D<T,DESCRIPTOR>::getBlock(std::size_t iBlock, std::size_t& si
   }
 
   return dataPtr;
+}
+
+
+
+////////// FREE FUNCTIONS //////////
+
+
+template<typename T, typename DESCRIPTOR>
+void setSuperExternalParticleField( SuperGeometry3D<T>& sGeometry, AnalyticalF3D<T,T>& velocity,
+                                    SmoothIndicatorF3D<T,T,true>& sIndicator,
+                                    SuperLattice3D<T, DESCRIPTOR>& sLattice )
+{
+  for (int iC = 0; iC < sLattice.getLoadBalancer().size(); ++iC) {
+    setBlockExternalParticleField( sGeometry.getExtendedBlockGeometry(iC), velocity, sIndicator,
+    sLattice.getExtendedBlockLattice(iC));
+  }
 }
 
 } // namespace olb

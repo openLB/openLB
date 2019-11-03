@@ -136,7 +136,7 @@ bool BlockIndicatorMaterial3D<T>::operator() (bool output[], const int input[])
   // of BlockGeometry3D<T>::get to avoid resetting geometry
   // statistics:
   const BlockGeometryStructure3D<T>& blockGeometry = this->_blockGeometryStructure;
-  const int current = blockGeometry.get(input[0], input[1], input[2]);
+  const int current = blockGeometry.getMaterial(input[0], input[1], input[2]);
   output[0] = std::any_of(_materials.cbegin(),
                           _materials.cend(),
                           [current](int material) { return current == material; });

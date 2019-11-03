@@ -191,7 +191,7 @@ void ParticleDynamics3D<T, DESCRIPTOR>::addParticleField(SmoothIndicatorF3D<T, T
 {
   /// Analytical3D functor for particle motion (trans+rot)
   ParticleU3D<T,T,DESCRIPTOR> velocity(indicator, _converter);
-   _sLattice.setExternalParticleField(_superGeometry, velocity, indicator);
+  setSuperExternalParticleField(_superGeometry, velocity, indicator, _sLattice);
 }
 
 template<typename T, typename DESCRIPTOR>

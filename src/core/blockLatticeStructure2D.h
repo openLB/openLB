@@ -93,9 +93,6 @@ public:
                      IndicatorF2D<T>& indicator,
                      AnalyticalF2D<T,T>& field);
 
-#ifndef OLB_PRECOMPILED
-  virtual void setExternalParticleField(BlockGeometryStructure2D<T>& blockGeometry, AnalyticalF2D<T,T>& velocity, SmoothIndicatorF2D<T,T,true>& sIndicator);
-#endif
   virtual void iniEquilibrium(BlockIndicatorF2D<T>& indicator,
                               AnalyticalF2D<T,T>& rho, AnalyticalF2D<T,T>& u);
   virtual void iniEquilibrium(BlockGeometryStructure2D<T>& blockGeometry, int material,
@@ -137,6 +134,14 @@ public:
   virtual LatticeStatistics<T> const& getStatistics() const =0;
 
 };
+
+////////// FREE FUNCTIONS //////////
+
+template <typename T, typename DESCRIPTOR>
+void setBlockExternalParticleField( BlockGeometryStructure2D<T>& blockGeometry, AnalyticalF2D<T,T>& velocity,
+                                    SmoothIndicatorF2D<T,T,true>& sIndicator,
+                                    BlockLattice2D<T,DESCRIPTOR>& extendedBlockLattice );
+
 
 }  // namespace olb
 
