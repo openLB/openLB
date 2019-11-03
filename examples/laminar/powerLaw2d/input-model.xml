@@ -1,0 +1,17 @@
+<Param>
+		  <geometry>
+					 <N> 40 </N>
+					 <lx> 2 </lx>
+					 <ly> 1 </ly>
+		  </geometry>
+		  <dynamics>
+					 <maxU> MAXU </maxU> <!-- Velocity profile does not change if maxU is changed. Try 0.1, 1 or 10 as an example. -->
+					 <Re> 10 </Re>
+					 <tau> 0.8 </tau>
+					 <n> 0.2 </n>
+		  </dynamics>
+		  <time>
+					 <Tmax> 20 </Tmax>
+					 <Tprint> 1 </Tprint>
+		  </time>
+</Param>

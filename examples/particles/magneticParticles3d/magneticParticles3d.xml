@@ -1,0 +1,47 @@
+<Param>
+  <Application>
+    <Name> sedimentation </Name>
+    <dim> 3 </dim>
+    <OlbDir> ../../../ </OlbDir>
+    <Discretization>
+      <LatticeRelaxationTime> 0.75 </LatticeRelaxationTime>
+      <Resolution> 50 </Resolution>
+    </Discretization>
+    <PhysParameters>
+      <CharPhysLength> .001 </CharPhysLength>
+      <CharPhysVelocity> 0.002 </CharPhysVelocity>
+      <viscosityType> Kinematic viscosity </viscosityType>
+      <PhysViscosity> 1.e-6  </PhysViscosity>
+      <PhysDensity> 1000. </PhysDensity>
+      <CharPhysPressure> 0. </CharPhysPressure>
+    </PhysParameters>
+    <SimulationTimes>  
+      <PhysFluidNST>   .12 </PhysFluidNST>
+      <PhysStartScT>   .1 </PhysStartScT>   
+      <PhysParticleT>  1.55 </PhysParticleT>
+    </SimulationTimes>
+  </Application>
+  <Output>
+    <OutputDir> ./tmp/ </OutputDir>
+    <MultiOutput> false </MultiOutput>
+    <Log>
+      <Filename> magneticParticles3d.log </Filename>
+      <SaveTime> 1.  </SaveTime>
+    </Log>
+    <VisualizationVTK>
+      <Filename> magneticParticles3dvtk</Filename>  
+      <SaveTime> 0.01 </SaveTime>
+    </VisualizationVTK>
+    <VisualizationImages>
+      <Filename> magneticParticles3dimage</Filename>
+      <SaveTime> 0.01 </SaveTime>
+    </VisualizationImages>    
+    <Timer>
+      <PrintMode>0</PrintMode>
+      <SkipType> 0 </SkipType>
+      <PhysTime> 0.1 </PhysTime>
+      <TimeSteps> 0.1 </TimeSteps>
+      <PrintSummary> true </PrintSummary>
+    </Timer>
+  </Output>
+</Param>

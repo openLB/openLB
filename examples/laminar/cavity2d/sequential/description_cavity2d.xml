@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://numhpc.math.kit.edu">
+  <version>0.1</version>
+  <block>
+    <name>Application</name>
+    <displayname>Application: Cavity 2D</displayname>
+    <enabled>true</enabled>
+    <key>
+      <name>Name</name>
+      <enabled>true</enabled>
+      <type>text</type>
+      <default>cavity2d</default>
+      <info>Name of the application</info>
+    </key>
+    <key>
+      <name>dim</name>
+      <displayname>Dimension</displayname>
+      <enabled>true</enabled>
+      <type>spinbox</type>
+      <default>2</default>
+      <min>2</min>
+      <max>2</max>
+      <info>Dimension of the domain</info>
+    </key>
+    <key>
+      <name>OlbDir</name>
+      <enabled>true</enabled>
+      <type>file</type>
+      <default>../../</default>
+      <info>Path to OpenLB directory</info>
+    </key>
+    <block>
+      <name>DiscParam</name>
+      <displayname>Discretization Parameters</displayname>
+      <enabled>true</enabled>
+      <key>
+        <name>latticeL</name>
+        <displayname>Lattice Length [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>0.0078125</default>
+        <info>
+          Length of a lattice cell in meter (proportional to Knudsen number)
+          (*obligatory)
+        </info>
+      </key>
+      <key>
+        <name>latticeU</name>
+        <displayname>Lattice Velocity</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>0.1</default>
+        <info>
+          Dimensionless lattice velocity (proportional to Mach number)
+        </info>
+      </key>
+    </block>
+    <block>
+      <name>PhysParam</name>
+      <displayname>Physical Parameters</displayname>
+      <enabled>true</enabled>
+      <key>
+        <name>MaxTime</name>
+        <displayname>MaxTime [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>15</default>
+        <info>
+          Maximal simulation time in seconds
+        </info>
+      </key>
+      <key>
+        <name>charL</name>
+        <displayname>Characteristical Length [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>1</default>
+        <info>Characteristical length in meter</info>
+      </key>
+      <key>
+        <name>charU</name>
+        <displayname>Characteristical Velocity [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>1</default>
+        <info>Characteristical speed in m/s</info>
+      </key>
+      <key>
+        <name>viscosityType</name>
+        <displayname>Describe viscosity by</displayname>
+        <enabled>true</enabled>
+        <type>combobox</type>
+        <defaultlist>
+          <item>Kinematic viscosity</item>
+          <item>Reynolds-Number</item>
+        </defaultlist>
+        <default>Kinematic viscosity</default>
+        <dep>
+          <value>Kinematic viscosity</value>
+          <target>
+            <targetblock>Application</targetblock>
+            <targetblock>PhysParam</targetblock>
+            <targetkey>charNu</targetkey>
+            <action>
+              <enablekey>true</enablekey>
+            </action>
+          </target>
+          <target>
+            <targetblock>Application</targetblock>
+            <targetblock>PhysParam</targetblock>
+            <targetkey>Re</targetkey>
+            <action>
+              <enablekey>false</enablekey>
+            </action>
+          </target>
+        </dep>
+        <dep>
+          <value>Reynolds-Number</value>
+          <target>
+            <targetblock>Application</targetblock>
+            <targetblock>PhysParam</targetblock>
+            <targetkey>Re</targetkey>
+            <action>
+              <enablekey>true</enablekey>
+            </action>
+          </target>
+          <target>
+            <targetblock>Application</targetblock>
+            <targetblock>PhysParam</targetblock>
+            <targetkey>charNu</targetkey>
+            <action>
+              <enablekey>false</enablekey>
+            </action>
+          </target>
+        </dep>
+        <info>Choose, whether you want to specify either characteristical kinematic viscosity or Reynolds-Number.</info>
+      </key>
+      <key>
+        <name>charNu</name>
+        <displayname>Characteristical Viscosity [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>0.001</default>
+        <info>
+          Kinematic viscosity in m^2/s
+        </info>
+      </key>
+      <key>
+        <name>Re</name>
+        <displayname>Reynolds-Number</displayname>
+        <enabled>false</enabled>
+        <type>decimal</type>
+        <default>100</default>
+        <info>
+          Reynolds number
+        </info>
+      </key>
+      <key>
+        <name>charRho</name>
+        <displayname>Characteristical Density [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>1</default>
+        <info>
+          Density factor rho in kg/m^d. As average latticeRho is always around 1, specify the average physical density here.
+          At some point latticeRho can be multplied by this factor to get the local physical density.
+        </info>
+      </key>
+      <key>
+        <name>charPressure</name>
+        <displayname>Characteristical Pressure [Si]</displayname>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>0</default>
+        <info>
+          This additive pressure constant in Pa is added to the relative pressure result of the computation
+          to get the absolute value.
+        </info>
+      </key>
+    </block>
+  </block>
+  <block>
+    <name>Output</name>
+    <displayname>Output Settings</displayname>
+    <enabled>true</enabled>
+    <key>
+      <name>OutputDir</name>
+      <enabled>true</enabled>
+      <type>file</type>
+      <default>./tmp/</default>
+      <info>Directory for output data</info>
+    </key>
+    <key>
+      <name>MultiOutput</name>
+      <displayname>Multi-Output Mode</displayname>
+      <enabled>true</enabled>
+      <type>checkbox</type>
+      <default>false</default>
+      <info>Chooses whether output will be activated per program (false) or per mpi process (true)</info>
+    </key>
+    <block>
+      <name>Log</name>
+      <displayname>Logging</displayname>
+      <enabled>true</enabled>
+      <key>
+        <name>Filename</name>
+        <enabled>true</enabled>
+        <type>file</type>
+        <default>cavity2d.log</default>
+        <info>Converter information will be stored in this file.</info>
+      </key>
+      <key>
+        <name>SaveTime</name>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>0.1</default>
+        <info>Time intervall for console output</info>
+      </key>
+    </block>
+    <block>
+      <name>VisualizationVTK</name>
+      <enabled>true</enabled>
+      <key>
+        <name>Filename</name>
+        <enabled>true</enabled>
+        <type>file</type>
+        <default>cavity2dvtk</default>
+        <info>No info</info>
+      </key>
+      <key>
+        <name>SaveTime</name>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>1</default>
+        <info>No info</info>
+      </key>
+    </block>
+    <block>
+      <name>VisualizationImages</name>
+      <enabled>true</enabled>
+      <key>
+        <name>Filename</name>
+        <enabled>true</enabled>
+        <type>file</type>
+        <default>cavity2dimage</default>
+        <info>No info</info>
+      </key>
+      <key>
+        <name>SaveTime</name>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>1</default>
+        <info>No info</info>
+      </key>
+    </block>
+    <block>
+      <name>Timer</name>
+      <enabled>true</enabled>
+      <key>
+        <name>PrintMode</name>
+        <displayname>Mode of Output</displayname>
+        <enabled>true</enabled>
+        <type>combobox</type>
+        <defaultlist>
+          <item value="0">csv-style</item>
+          <item value="1">one-line</item>
+          <item value="2">two-line-layout</item>
+        </defaultlist>
+        <default>0</default>
+        <info>Displays timer informations about current calculation with different output modes.</info>
+      </key>
+      <key>
+        <name>SkipType</name>
+        <displayname>Skip output by</displayname>
+        <enabled>true</enabled>
+        <type>combobox</type>
+        <defaultlist>
+          <item value="0">Physical time</item>
+          <item value="1">Time steps</item>
+        </defaultlist>
+        <default>0</default>
+        <dep>
+          <value>0</value>
+          <target>
+            <targetblock>Output</targetblock>
+            <targetblock>Timer</targetblock>
+            <targetkey>PhysTime</targetkey>
+            <action>
+              <enablekey>true</enablekey>
+            </action>
+          </target>
+          <target>
+            <targetblock>Output</targetblock>
+            <targetblock>Timer</targetblock>
+            <targetkey>TimeSteps</targetkey>
+            <action>
+              <enablekey>false</enablekey>
+            </action>
+          </target>
+        </dep>
+        <dep>
+          <value>1</value>
+          <target>
+            <targetblock>Output</targetblock>
+            <targetblock>Timer</targetblock>
+            <targetkey>PhysTime</targetkey>
+            <action>
+              <enablekey>false</enablekey>
+            </action>
+          </target>
+          <target>
+            <targetblock>Output</targetblock>
+            <targetblock>Timer</targetblock>
+            <targetkey>TimeSteps</targetkey>
+            <action>
+              <enablekey>true</enablekey>
+            </action>
+          </target>
+        </dep>
+        <info>Choose, whether timer information should displayed either by physical or computational time steps.</info>
+      </key>
+      <key>
+        <name>PhysTime</name>
+        <enabled>true</enabled>
+        <type>decimal</type>
+        <default>.1</default>
+        <info>No info</info>
+      </key>
+      <key>
+        <name>TimeSteps</name>
+        <enabled>false</enabled>
+        <type>text</type>
+        <default>128</default>
+        <info>1 will print every step, 2 each second, etc.</info>
+      </key>
+      <key>
+        <name>PrintSummary</name>
+        <enabled>true</enabled>
+        <type>checkbox</type>
+        <default>true</default>
+        <info>Determines whether a summary after calculation should be displayed or not.</info>
+      </key>
+    </block>
+  </block>
+</description>

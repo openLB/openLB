@@ -1,0 +1,66 @@
+#  This file is part of the OpenLB library
+#
+#  Copyright (C) 2017 Adrian Kummerlaender
+#  E-mail contact: info@openlb.net
+#  The most recent release of OpenLB can be downloaded at
+#  <http://www.openlb.net/>
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public
+#  License along with this program; if not, write to the Free
+#  Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+#  Boston, MA  02110-1301, USA.
+
+
+generic        :=
+
+precompiled    := blockBaseF2D \
+                  blockBaseF3D \
+                  blockCalcF2D \
+                  blockCalcF3D \
+                  blockLatticeIntegralF2D \
+                  blockLatticeIntegralF3D \
+                  blockLatticeLocalF2D \
+                  blockLatticeLocalF3D \
+                  blockLocalAverage2D \
+                  blockLocalAverage3D \
+                  blockReduction2D2D \
+                  blockReduction2D1D \
+                  blockReduction3D2D \
+                  blockMin3D \
+                  blockMax3D \
+                  blockAverage3D \
+                  blockGeometryFaces3D \
+                  blockLatticeRefinementMetricF2D \
+                  superBaseF2D \
+                  superBaseF3D \
+                  superCalcF2D \
+                  superCalcF3D \
+                  superConst2D \
+                  superConst3D \
+                  superLatticeIntegralF2D \
+                  superLatticeIntegralF3D \
+                  superLatticeLocalF2D \
+                  superLatticeLocalF3D \
+                  superLocalAverage2D \
+                  superLocalAverage3D \
+                  reductionF2D \
+                  reductionF3D \
+                  turbulentF3D \
+                  latticeFrameChangeF3D \
+                  superMin3D \
+                  superMax3D \
+                  superAverage3D \
+                  superGeometryFaces3D \
+                  superErrorNorm2D \
+                  superErrorNorm3D \
+                  superLatticeRefinementMetricF2D

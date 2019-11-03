@@ -1,0 +1,41 @@
+<Param>
+    <Geometry>
+        <Inflow>
+            <IndicatorCylinder3D center1="0 50 50" center2="5 50 50" radius="20"/>
+        </Inflow>
+        <Outflow0>
+            <IndicatorCylinder3D center1="200 50 50" center2="190 50 50" radius="20"/>
+        </Outflow0>
+        <Outflow1>
+            <IndicatorCylinder3D center1="115 3 50" center2="115 7 50" radius="10"/>
+        </Outflow1>
+        <Venturi>
+            <IndicatorUnion3D>
+                <IndicatorCylinder3D center1="5 50 50" center2="40 50 50" radius="20"/>
+                <IndicatorCone3D center1="40 50 50" center2="80 50 50" radius1="20" radius2="10"/>
+                <IndicatorCylinder3D center1="80 50 50" center2="120 50 50" radius="10"/>
+                <IndicatorCone3D center1="120 50 50" center2="160 50 50" radius1="10" radius2="20"/>
+                <IndicatorCylinder3D center1="160 50 50" center2="195 50 50" radius="20"/>
+                <IndicatorCylinder3D center1="115 50 50" center2="115 25 50" radius="4"/>
+                <IndicatorCone3D center1="115 25 50" center2="115 5 50" radius1="4" radius2="10"/>
+            </IndicatorUnion3D>
+        </Venturi>
+    </Geometry>
+    <Application>
+        <Discretization>
+            <!-- resolution: number of voxels per CharPhysLength -->
+            <Resolution> 1 </Resolution>
+            <CharLatticeVelocity> 0.2 </CharLatticeVelocity>
+        </Discretization>
+        <PhysParameters>
+            <!-- CharPhysLength: reference length of simulation geometry -->
+            <CharPhysLength> 0.1 </CharPhysLength>
+            <!-- CharPhysVelocity: maximal/highest expected velocity during simulation in __m / s__ -->
+            <CharPhysVelocity> 2 </CharPhysVelocity>
+            <!-- PhysViscosity: physical kinematic viscosity in __m^2 / s__ -->
+            <PhysViscosity> 0.001 </PhysViscosity>
+            <!-- PhysDensity: physical density in __kg / m^3__ -->
+            <PhysDensity> 1 </PhysDensity>
+        </PhysParameters>
+    </Application>
+</Param>
